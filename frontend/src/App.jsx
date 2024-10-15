@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Rocket Voting System</h1>
+      <h1 className="text-center">Blockchian Voting System</h1>
 
       {!isAdmin ? (
         <>
@@ -64,8 +64,8 @@ function App() {
               >
                 <img src={candidateA} className="card-img-top" alt="Candidate A" />
                 <div className="card-body">
-                  <h5 className="card-title">Naru Modi</h5> {/* Update with actual candidate name */}
-                  <p className="card-text">Description for Naru Modi.</p>
+                  <h5 className="card-title">Candidate A</h5> 
+                  <p className="card-text">Description for Candidate A.</p>
                 </div>
               </div>
             </div>
@@ -78,8 +78,8 @@ function App() {
               >
                 <img src={candidateB} className="card-img-top" alt="Candidate B" />
                 <div className="card-body">
-                  <h5 className="card-title">Thala</h5> {/* Update with actual candidate name */}
-                  <p className="card-text">Description for Thala.</p>
+                  <h5 className="card-title">Candidate B</h5> 
+                  <p className="card-text">Description for Candidate B.</p>
                 </div>
               </div>
             </div>
@@ -92,7 +92,7 @@ function App() {
               >
                 <img src={candidateC} className="card-img-top" alt="Candidate C" />
                 <div className="card-body">
-                  <h5 className="card-title">Captain Jagdale</h5> {/* Update with actual candidate name */}
+                  <h5 className="card-title">Candidate C</h5> 
                   <p className="card-text">Description for Candidate C.</p>
                 </div>
               </div>
@@ -100,7 +100,7 @@ function App() {
           </div>
 
           {/* Button to submit the vote */}
-          <button className="btn btn-success mt-3" onClick={castVote} disabled={loading || !selectedCandidate}>
+          <button className="btn btn-primary mt-3" onClick={castVote} disabled={loading || !selectedCandidate}>
             {loading ? "Casting Vote..." : "Cast Vote"}
           </button>
 
@@ -108,7 +108,7 @@ function App() {
           {message && <p className="text-danger mt-3">{message}</p>}
 
           {/* Admin Login Button */}
-          <button className="btn btn-secondary mt-3" onClick={() => setIsAdmin(true)}>
+          <button className="btn btn-primary mt-3" onClick={() => setIsAdmin(true)}>
             Admin Login
           </button>
         </>
