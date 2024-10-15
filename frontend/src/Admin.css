@@ -1,0 +1,12 @@
+body {
+    background-color: #f8f9fa; /* Light gray background */
+  }
+  
+  h2 {
+    margin-bottom: 20px; /* Spacing below the header */
+  }
+  
+  .btn {
+    width: 100%; /* Full-width buttons */
+  }
+  
