@@ -1,0 +1,26 @@
+/* Results.css */
+
+/* Card styling */
+.card {
+    border-radius: 10px; /* Rounded corners for the card */
+    transition: transform 0.3s; /* Smooth scale effect */
+  }
+  
+  .card:hover {
+    transform: scale(1.03); /* Scale up on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  }
+  
+  /* Image styling */
+  .card-img-top {
+    border-top-left-radius: 10px; /* Rounded corners for images */
+    border-top-right-radius: 10px; /* Rounded corners for images */
+  }
+  
+  /* Media query for responsive text */
+  @media (max-width: 576px) {
+    .card-body {
+      padding: 15px; /* Padding adjustment on smaller screens */
+    }
+  }
+  

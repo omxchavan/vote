@@ -4,11 +4,13 @@ import axios from 'axios';
 import Admin from './Admin'; // Import the Admin component
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import './App.css'; // Custom CSS file
+import 'animate.css';
+
 
 // Import your candidate images
-import candidateA from './assets/modi.jpg'; // Image for BJP
-import candidateB from './assets/modi.jpg'; // Image for Congress (replace with actual image path)
-import candidateC from './assets/modi.jpg'; // Image for Shiv Sena (replace with actual image path)
+import candidateA from './assets/modi.png'; // Image for BJP
+import candidateB from './assets/cong.png'; // Image for Congress (replace with actual image path)
+import candidateC from './assets/shiv.png'; // Image for Shiv Sena (replace with actual image path)
 import BlockchainCards from './BlockchainCards'; // Import BlockchainCards component
 
 function App() {
