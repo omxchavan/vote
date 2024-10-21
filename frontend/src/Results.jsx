@@ -1,9 +1,19 @@
 import React from 'react';
 
 const Results = ({ results, onLogout }) => {
+  console.log("Results Data: ", results.map(result => result.voteData)); // Log only voteData
+
+  // Mapping of original vote data to new candidate names
+  const nameMapping = {
+    'Candidate A': 'BJP',
+    'Candidate B': 'Congress',
+    'Candidate C': 'Shiv Sena',
+  };
+
   // Count votes for each candidate
   const voteCounts = results.reduce((acc, { voteData }) => {
-    acc[voteData] = (acc[voteData] || 0) + 1;
+    const candidateName = nameMapping[voteData] || voteData; // Use mapped name
+    acc[candidateName] = (acc[candidateName] || 0) + 1;
     return acc;
   }, {});
 
@@ -19,7 +29,6 @@ const Results = ({ results, onLogout }) => {
           <h2>Voting Results</h2>
         </div>
         <div className="card-body">
-          {/* Display total votes and the candidate with the maximum votes */}
           <div className="mb-3">
             <h5>Total Votes for Each Candidate:</h5>
             <ul className="list-group mb-3">
@@ -34,8 +43,6 @@ const Results = ({ results, onLogout }) => {
               <strong>{maxVotesCandidate}</strong> has the most votes with <strong>{voteCounts[maxVotesCandidate]}</strong> votes.
             </div>
           </div>
-         
-          
         </div>
         <div className="card-footer text-center">
           <button className="btn btn-danger mt-3" onClick={onLogout}>Logout</button>

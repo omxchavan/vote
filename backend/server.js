@@ -42,7 +42,8 @@ class Blockchain {
         if (this.votersSet.has(voterID)) {
             return { success: false, message: "Voter has already voted!" };
         }
-
+    
+        // Create new block data using the candidate name
         const newBlockData = `VoterID: ${voterID}, Candidate: ${candidate}`;
         const previousBlock = this.getLatestBlock();
         const newBlock = new Block(
@@ -52,18 +53,18 @@ class Blockchain {
             newBlockData,
             this.calculateHash(this.chain.length, previousBlock.hash, Date.now(), newBlockData)
         );
-
+    
         // Add voter to the set of people who have voted
         this.votersSet.add(voterID);
         this.chain.push(newBlock);
-
+    
         // Increment vote count for the candidate
         if (this.candidateVotes[candidate]) {
             this.candidateVotes[candidate]++;
         } else {
             this.candidateVotes[candidate] = 1;
         }
-
+    
         return { success: true, message: "Vote added successfully!" };
     }
 
