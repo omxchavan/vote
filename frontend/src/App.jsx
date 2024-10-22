@@ -80,11 +80,11 @@ function App() {
               <>
                 {/* Input for Voter ID */}
                 <div className="form-group">
-                  <label>Voter ID:</label>
+                  <label>Token:</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter Voter ID"
+                    placeholder="Enter token"
                     value={voterID}
                     onChange={(e) => setVoterID(e.target.value)}
                   />
@@ -150,7 +150,7 @@ function App() {
 
                 {/* Link to Blockchain Cards Page */}
                 <Link to="/blockchain" className="btn btn-secondary mt-3">
-                  Go to Blockchain Cards
+                  Go to Blockchain 
                 </Link>
               </>
             ) : (

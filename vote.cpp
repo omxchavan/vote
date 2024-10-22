@@ -5,13 +5,14 @@
 #include <string>
 #include <unordered_set> // For keeping track of voters
 #include <functional>    // For std::hash
+#include <unordered_map> // For counting votes
 
 using namespace std;
 
 // Function to calculate a simple hash using std::hash
 string calculateHash(string data) {
     hash<string> hasher;
-    size_t hashValue = hasher(data);
+    size_t hashValue = hasher(data);                            //universal key
     stringstream ss;
     ss << hex << hashValue;
     return ss.str();
@@ -20,11 +21,11 @@ string calculateHash(string data) {
 // Block Class
 class Block {
 public:
-    int index;            // Block number in the chain
-    string previousHash;   // Hash of the previous block
-    string timestamp;      // Time when the block was created
-    string voteData;       // The vote (e.g., voter ID and candidate)
-    string hash;           // Hash of the current block
+    int index;                           // Block number in the chain
+    string previousHash;                 // Hash of the previous block
+    string timestamp;                    // Time when the block was created
+    string voteData;                     // The vote (e.g., voter ID and candidate)
+    string hash;                         // Hash of the current block
 
     // Constructor
     Block(int idx, string prevHash, string vote) {
@@ -39,8 +40,9 @@ public:
 // Blockchain Class
 class Blockchain {
 private:
-    vector<Block> chain;              // The chain of blocks
-    unordered_set<string> votersList; // Set to keep track of voters who have already voted
+    vector<Block> chain;                               // The chain of blocks
+    unordered_set<string> votersList;                    // Set to keep track of voters who have already voted
+    unordered_map<string, int> voteCount;                  // Map to count votes for each candidate
 
 public:
     // Constructor to initialize the blockchain with a Genesis block
@@ -55,7 +57,7 @@ public:
     }
 
     // Add a new block to the chain
-    bool addBlock(string voterID, string candidate) {
+    bool addBlock(string voterID, string candidate) {                 //magic begins here
         // Check if the voter has already voted
         if (votersList.find(voterID) != votersList.end()) {
             cout << "Error: Voter " << voterID << " has already voted.\n";
@@ -69,38 +71,31 @@ public:
         string voteData = "VoterID: " + voterID + ", Candidate: " + candidate;
         Block newBlock(chain.size(), getLastBlock().hash, voteData);
         chain.push_back(newBlock);
+
+        // Count the vote for the candidate
+        voteCount[candidate]++;
+
         cout << "Voter " << voterID << " successfully voted for " << candidate << ".\n";
         return true;
     }
 
-    // Validate the blockchain by checking the hashes
-    bool isChainValid() {
-        for (int i = 1; i < chain.size(); i++) {
-            Block currentBlock = chain[i];
-            Block previousBlock = chain[i - 1];
+    // Determine the candidate with the most votes
+    void showVotingResults() {
+        string winner;
+        int maxVotes = 0;
 
-            // Check if current block's hash is correct
-            if (currentBlock.hash != calculateHash(currentBlock.previousHash + currentBlock.timestamp + currentBlock.voteData)) {
-                return false;
-            }
-            // Check if current block's previous hash matches the previous block's hash
-            if (currentBlock.previousHash != previousBlock.hash) {
-                return false;
+        cout << "\nVoting Results:\n";
+
+        // Iterate through the vote count map
+        for (const auto& pair : voteCount) {
+            cout << "Candidate " << pair.first << ": " << pair.second << " votes.\n";
+            if (pair.second > maxVotes) {
+                maxVotes = pair.second;
+                winner = pair.first;
             }
         }
-        return true;
-    }
 
-    // Print the entire blockchain
-    void printBlockchain() {
-        for (const auto& block : chain) {
-            cout << "Block " << block.index << ":\n";
-            cout << "Previous Hash: " << block.previousHash << "\n";
-            cout << "Timestamp: " << block.timestamp << "\n";
-            cout << "Vote Data: " << block.voteData << "\n";
-            cout << "Hash: " << block.hash << "\n";
-            cout << "-----------------------------\n";
-        }
+        cout << "\nThe winner is: Candidate " << winner << " with " << maxVotes << " votes!\n";
     }
 };
 
@@ -124,15 +119,8 @@ int main() {
         votingBlockchain.addBlock(voterID, candidate);
     }
 
-    // Print the blockchain after all votes
-    votingBlockchain.printBlockchain();
-
-    // Validate the blockchain
-    if (votingBlockchain.isChainValid()) {
-        cout << "Blockchain is valid.\n";
-    } else {
-        cout << "Blockchain has been tampered with!\n";
-    }
+    // Show the voting results after all votes
+    votingBlockchain.showVotingResults();
 
     return 0;
 }

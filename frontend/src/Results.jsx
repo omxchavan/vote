@@ -1,7 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Results = ({ results, onLogout }) => {
-  console.log("Results Data: ", results.map(result => result.voteData)); // Log only voteData
+  const [maxVotesCandidate, setMaxVotesCandidate] = useState("");
+  const [maxVotes, setMaxVotes] = useState(0);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/results');
+        const { BJP, Congress, 'Shiv Sena': shivsena } = response.data;
+
+        // Prepare an array of candidates and votes
+        const candidates = [
+          { name: 'BJP', votes: BJP },
+          { name: 'Congress', votes: Congress },
+          { name: 'Shiv Sena', votes: shivsena }
+        ];
+
+        // Find the candidate with the maximum votes
+        const maxCandidate = candidates.reduce((max, candidate) => {
+          return candidate.votes > max.votes ? candidate : max;
+        }, { name: 'Tie', votes: 0 });
+
+        // Check if there's a tie by counting how many candidates have the max votes
+        const isTie = candidates.filter(c => c.votes === maxCandidate.votes).length > 1;
+
+        setMaxVotesCandidate(isTie ? 'Tie' : maxCandidate.name);
+        setMaxVotes(isTie ? 0 : maxCandidate.votes);
+      } catch (error) {
+        console.error("Error fetching results:", error);
+      }
+    };
+
+    fetchResults();
+  }, []); // Empty dependency array to run once on mount
 
   // Mapping of original vote data to new candidate names
   const nameMapping = {
@@ -10,17 +43,12 @@ const Results = ({ results, onLogout }) => {
     'Candidate C': 'Shiv Sena',
   };
 
-  // Count votes for each candidate
+  // Count votes for each candidate from props
   const voteCounts = results.reduce((acc, { voteData }) => {
     const candidateName = nameMapping[voteData] || voteData; // Use mapped name
     acc[candidateName] = (acc[candidateName] || 0) + 1;
     return acc;
   }, {});
-
-  // Find the candidate with the maximum votes
-  const maxVotesCandidate = Object.keys(voteCounts).reduce((a, b) =>
-    voteCounts[a] > voteCounts[b] ? a : b
-  );
 
   return (
     <div className="container mt-5">
@@ -40,7 +68,13 @@ const Results = ({ results, onLogout }) => {
               ))}
             </ul>
             <div className="alert alert-success text-center">
-              <strong>{maxVotesCandidate}</strong> has the most votes with <strong>{voteCounts[maxVotesCandidate]}</strong> votes.
+              {maxVotesCandidate === 'Tie' ? (
+                <strong>It's a tie!</strong>
+              ) : (
+                <>
+                  <strong>{maxVotesCandidate}</strong> has the most votes with <strong>{maxVotes}</strong> votes.
+                </>
+              )}
             </div>
           </div>
         </div>
